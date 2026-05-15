@@ -26,4 +26,14 @@ const GameBoard = () => {
   return {getBoard,writeMark,printBoard};
 }
 
+function Cell() {
+  let value = 0;
 
+  const addMark = (player) => {
+    value = player
+  }
+
+  const getValue = () => value;
+
+  return {addMark,getValue};
+}
