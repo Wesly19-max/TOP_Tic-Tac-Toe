@@ -32,7 +32,12 @@ function Cell() {
   let value = 0;
 
   const addMark = (player) => {
-    value = player;
+    if (value == 0) {
+      value = player;
+    }else {
+      console.log("This cell has already been marked by another player.Please choose another cell");
+    }
+    
   }
 
   const getValue = () => value;
@@ -92,8 +97,5 @@ const GameController = ((
     playRound,
     getActivePlayer,
   };
-
-
-
 })();
 
