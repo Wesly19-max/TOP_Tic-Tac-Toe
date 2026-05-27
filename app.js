@@ -3,7 +3,7 @@ function GameBoard() {
   const columns=3;
   const board=[];
 
-  //create gameBoard
+  //create 3x3 gameBoard
   for (let i=0;i<rows;i++) {
     board[i] = [];
     for (let j=0;j<columns;j++) {
@@ -13,6 +13,7 @@ function GameBoard() {
 
   const getBoard = () => board;
 
+  //place the player's mark for his turn
   const writeMark = (row,col,player) => {
     board[row][col].addMark(player);
   }
@@ -29,13 +30,13 @@ function GameBoard() {
 }
 
 function Cell() {
-  let value = 0;
+  let value = '';
 
   const addMark = (player) => {
-    if (value == 0) {
+    if (value == '') {
       value = player;
     }else {
-      console.log("This cell has already been marked by another player.Please choose another cell");
+      console.log("This cell has already been marked by another player.Please choose another cell.");
     }
     
   }
@@ -83,8 +84,133 @@ const GameController = ((
 
     board.writeMark(row,col,getActivePlayer().token);
 
-    //handles win condition logic and message
+    const currentToken = getActivePlayer().token;
+    const currentBoard = board.getBoard();
+    
+    //win condition logic for horizontal axis
 
+    let totalMatches = 1; 
+
+    //  SCAN LEFT
+
+    let leftCol = col - 1; 
+
+    //while we are still on the board 
+    while (leftCol >= 0) {
+      // and the cell matches the active player's token, not an empty cell
+      if (currentBoard[row][leftCol].getValue() === currentToken) {
+        totalMatches++;
+      } else {
+        break; // Stop scanning this direction if a different mark or empty cell is hit
+      }
+      leftCol--;
+    }
+
+    // SCAN RIGHT 
+
+    let rightCol = col + 1;
+    //while we are still on the board
+    while (rightCol <= 2) {
+      // and the cell matches the active player's token, not an empty cell
+      if (currentBoard[row][rightCol].getValue() === currentToken) {
+        totalMatches++;
+      } else {
+        break; // Stop scanning this direction if a different mark or empty cell is hit
+      }
+      rightCol++;
+    }
+
+    if (totalMatches<=2) {
+      totalMatches = 1;
+    };
+    //win condition logic for vertical axis
+
+    //SCAN UP
+    let upRow = row-1;
+      //while we are still on the board
+      while (upRow >= 0) {
+        //ensure token matches active player
+        if (currentBoard[upRow][col].getValue() === currentToken) {
+          totalMatches++;
+        } else {
+          break;
+        }
+        upRow--; //go up another cell
+      }
+        
+      
+    //SCAN DOWN
+    let downRow = row+1;
+      while (downRow<=2) {
+        if(currentBoard[downRow][col].getValue() === currentToken) {
+          totalMatches++;
+        }else {
+          break;
+        }
+      downRow ++; //go down another cell  
+      }
+
+    if (totalMatches<=2) {
+      totalMatches = 1;
+    };
+    //win condition logic for diagonal axis
+    //scan lower diagonal
+    let lowerRow = row +1;
+    let upperRow = row -1;
+    let upperCol = col +1;
+    let lowerCol = col-1;
+    
+    while (lowerRow<=2 && lowerCol>=0) {
+      if(currentBoard[lowerRow][lowerCol].getValue() === currentToken) {
+        totalMatches++;
+      }else {
+        break;
+      }
+
+      lowerRow ++;
+      lowerCol --;
+    }
+    //scan upper diagonal
+    while (upperRow>=0 && upperCol<=2) {
+      if (currentBoard[upperRow][upperCol].getValue() === currentToken) {
+        totalMatches++;
+      }else {
+        break;
+      }
+
+      upperRow--;
+      upperCol ++;
+    }
+
+    //scan anti-diagonal
+    while (upperRow>=0 && lowerCol>=0) {
+      if(currentBoard[upperRow][lowerCol].getValue() === currentToken) {
+        totalMatches++;
+      }else {
+        break;
+      }
+
+      upperRow --;
+      lowerCol --;
+    }
+    //scan upper diagonal
+    while (lowerRow<=2 && upperCol<=2) {
+      if (currentBoard[lowerRow][upperCol].getValue() === currentToken) {
+        totalMatches++;
+      }else {
+        break;
+      }
+
+      lowerRow++;
+      upperCol ++;
+    }
+
+    //  EVALUATE WIN CONDITION 
+    if (totalMatches === 3) {
+      console.log(`${getActivePlayer().name} wins!`);
+      board.printBoard();
+      return;
+    }
     switchPlayerTurn();
     printNewRound();
   };
@@ -98,4 +224,3 @@ const GameController = ((
     getActivePlayer,
   };
 })();
-
