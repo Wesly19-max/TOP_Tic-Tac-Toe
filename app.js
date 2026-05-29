@@ -46,10 +46,10 @@ function Cell() {
   return {addMark,getValue};
 }
 
-const GameController = ((
+function GameController(
   playerOneName = "Player One",
   playerTwoName = "Player Two"
-) => {
+) {
 
   const board = GameBoard();
 
@@ -207,6 +207,8 @@ const GameController = ((
 
     //  EVALUATE WIN CONDITION 
     if (totalMatches === 3) {
+      const resultDiv = document.querySelector(".result")
+      resultDiv.textContent = `${getActivePlayer().name} wins!`
       console.log(`${getActivePlayer().name} wins!`);
       board.printBoard();
       return;
@@ -222,5 +224,61 @@ const GameController = ((
   return {
     playRound,
     getActivePlayer,
+    getBoard: board.getBoard,
   };
-})();
+};
+
+function ScreenController() {
+  const game = GameController();
+  const playerTurnDiv = document.querySelector(".turn");
+  const boardDiv = document.querySelector(".board");
+  const container = document.querySelector(".container");
+  const restartBtn = document.querySelector(".restart");
+
+
+
+  const updateScreen = () => {
+    //clear the board
+    boardDiv.textContent = '';
+
+    //get the newest version of board and player's turn
+    const board = game.getBoard();
+    const activePlayer = game.getActivePlayer();
+
+    //display player's turn
+    playerTurnDiv.textContent = `${activePlayer.name}'s turn`;
+    //render contents of the board
+    board.forEach((row,rowIndex) => {
+      row.forEach((cell,colIndex)=> {
+        const cellButton = document.createElement("button");
+        cellButton.classList.add("cell");
+
+        cellButton.dataset.column = colIndex;
+        cellButton.dataset.row = rowIndex;
+        cellButton.textContent = cell.getValue();
+        boardDiv.appendChild(cellButton);
+
+      
+
+      })
+    })
+  }
+  //add event listener to board
+  function clickHandlerBoard(e) {
+    const selectedColumn = parseInt(e.target.dataset.column);
+    const selectedRow = parseInt(e.target.dataset.row);
+    game.playRound(selectedRow,selectedColumn);
+    updateScreen();
+  }
+  boardDiv.addEventListener("click",clickHandlerBoard);
+  
+  //when restart button is clicked refresh the page
+  restartBtn.addEventListener("click",() => {
+    location.reload();
+  });
+    
+
+  updateScreen();
+}
+
+ScreenController();
