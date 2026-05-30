@@ -1,16 +1,25 @@
+* {
+  font-family:monospace;
+}
+
 .board {
   display:grid;
-  height:500px;
-  width:500px;
+  height:400px;
+  width:400px;
   grid-template-columns: repeat(3,1fr);
   grid-template-rows:repeat(3,1fr);
   border:1px solid black;
   gap:2px;
   padding:2px;
   background-color:yellow;
-
 }
 
+button:disabled {
+  opacity:1;
+  background-color:lightyellow;
+  color:black;
+  cursor:not-allowed;
+}
 .cell {
   display:flex;
   justify-content: center;
@@ -24,9 +33,13 @@
 
 
 .restart {
-  height:50px;
+  height:40px;
   width:80px;
-  font-size:20px;
+  font-size:15px;
+  border-radius:5px;
+  background-color:lightblue;
+  font-weight:700;
+  margin-top:25px;
 }
 
 .container {
