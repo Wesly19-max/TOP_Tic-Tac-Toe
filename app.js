@@ -84,6 +84,7 @@ function GameController(
 
     board.writeMark(row,col,getActivePlayer().token);
 
+    const turnDiv = document.querySelector(".turn")
     const currentToken = getActivePlayer().token;
     const currentBoard = board.getBoard();
     
@@ -120,9 +121,28 @@ function GameController(
       rightCol++;
     }
 
-    if (totalMatches<=2) {
-      totalMatches = 1;
-    };
+    //  EVALUATE WIN CONDITION 
+    
+    if (totalMatches === 3) {
+      
+      turnDiv.textContent = `${getActivePlayer().name} wins!`
+      
+      board.printBoard();
+
+      const boardDiv = document.querySelector(".board");
+      const CellBtns = document.querySelectorAll(".cell");
+      
+      CellBtns.forEach((cell) => {
+          cell.disabled = true;
+        }
+      )
+      boardDiv.classList.add("disabled")
+
+      return;
+      
+    }
+    totalMatches = 1;
+    
     //win condition logic for vertical axis
 
     //SCAN UP
@@ -150,9 +170,27 @@ function GameController(
       downRow ++; //go down another cell  
       }
 
-    if (totalMatches<=2) {
-      totalMatches = 1;
-    };
+    //  EVALUATE WIN CONDITION 
+    
+    if (totalMatches === 3) {
+      
+      turnDiv.textContent = `${getActivePlayer().name} wins!`
+      
+      board.printBoard();
+
+      const boardDiv = document.querySelector(".board");
+      const CellBtns = document.querySelectorAll(".cell");
+      
+      CellBtns.forEach((cell) => {
+          cell.disabled = true;
+        }
+      )
+      boardDiv.classList.add("disabled")
+
+      return;
+      
+    }
+    totalMatches = 1;
     //win condition logic for diagonal axis
     //scan lower diagonal
     let lowerRow = row +1;
@@ -182,6 +220,32 @@ function GameController(
       upperCol ++;
     }
 
+    lowerRow = row +1;
+    upperRow = row -1;
+    upperCol = col +1;
+    lowerCol = col-1;
+
+    //  EVALUATE WIN CONDITION 
+    
+    if (totalMatches === 3) {
+      
+      turnDiv.textContent = `${getActivePlayer().name} wins!`
+      
+      board.printBoard();
+
+      const boardDiv = document.querySelector(".board");
+      const CellBtns = document.querySelectorAll(".cell");
+      
+      CellBtns.forEach((cell) => {
+          cell.disabled = true;
+        }
+      )
+      boardDiv.classList.add("disabled")
+
+      return;
+      
+    }
+    totalMatches = 1;
     //scan anti-diagonal
     while (upperRow>=0 && lowerCol>=0) {
       if(currentBoard[upperRow][lowerCol].getValue() === currentToken) {
@@ -204,10 +268,10 @@ function GameController(
       lowerRow++;
       upperCol ++;
     }
-    console.log(totalMatches)
+
     //  EVALUATE WIN CONDITION 
-    const turnDiv = document.querySelector(".turn")
-    if (totalMatches >=3) {
+    
+    if (totalMatches === 3) {
       
       turnDiv.textContent = `${getActivePlayer().name} wins!`
       
@@ -225,7 +289,7 @@ function GameController(
       return;
       
     }
-
+    console.log(totalMatches)
     
     switchPlayerTurn();
     printNewRound();
