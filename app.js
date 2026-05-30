@@ -253,7 +253,7 @@ function ScreenController() {
   const restartBtn = document.querySelector(".restart");
   const board = game.getBoard();
 
-
+  
   const updateScreen = () => {
     
 
@@ -306,8 +306,6 @@ function ScreenController() {
     const selectedColumn = parseInt(e.target.dataset.column);
     const selectedRow = parseInt(e.target.dataset.row);
     //if the selected cell on board is empty string then play a round
-    console.log(board)
-    console.log(board[selectedRow][selectedColumn].getValue())
     if (board[selectedRow][selectedColumn].getValue() === '') {
       game.playRound(selectedRow,selectedColumn);
     }
