@@ -36,7 +36,9 @@ function Cell() {
     if (value == '') {
       value = player;
     }else {
-      console.log("This cell has already been marked by another player.Please choose another cell.");
+      const reminderDiv = document.querySelector(".reminder");
+      console.log(reminderDiv)
+      alert("This cell has already been marked by another player.Please choose another cell.");
     }
     
   }
@@ -207,8 +209,8 @@ function GameController(
 
     //  EVALUATE WIN CONDITION 
     if (totalMatches === 3) {
-      const resultDiv = document.querySelector(".result")
-      resultDiv.textContent = `${getActivePlayer().name} wins!`
+      const turnDiv = document.querySelector(".turn")
+      turnDiv.textContent = `${getActivePlayer().name} wins!`
       console.log(`${getActivePlayer().name} wins!`);
       board.printBoard();
 
@@ -249,7 +251,7 @@ function ScreenController() {
   const boardDiv = document.querySelector(".board");
   const container = document.querySelector(".container");
   const restartBtn = document.querySelector(".restart");
-
+  const board = game.getBoard();
 
 
   const updateScreen = () => {
@@ -259,11 +261,11 @@ function ScreenController() {
     const board = game.getBoard();
     const activePlayer = game.getActivePlayer();
 
-    //display player's turn
-    playerTurnDiv.textContent = `${activePlayer.name}'s turn`;
+    
     //render contents of the board
     
     if (boardDiv.classList.contains("disabled")) {
+      playerTurnDiv.textContent = `${activePlayer.name} wins!`;
       const cellBtns = document.querySelectorAll(".cell");
       console.log(cellBtns)
       board.forEach((row,rowIndex) => {
@@ -276,8 +278,12 @@ function ScreenController() {
         })
       })
     }else {
+
       //clear the board
       boardDiv.textContent = '';
+
+      //display player's turn
+      playerTurnDiv.textContent = `${activePlayer.name}'s turn`;
 
       board.forEach((row,rowIndex) => {
         row.forEach((cell,colIndex)=> {
@@ -299,7 +305,13 @@ function ScreenController() {
   function clickHandlerBoard(e) {
     const selectedColumn = parseInt(e.target.dataset.column);
     const selectedRow = parseInt(e.target.dataset.row);
-    game.playRound(selectedRow,selectedColumn);
+    //if the selected cell on board is empty string then play a round
+    console.log(board)
+    console.log(board[selectedRow][selectedColumn].getValue())
+    if (board[selectedRow][selectedColumn].getValue() === '') {
+      game.playRound(selectedRow,selectedColumn);
+    }
+    
     updateScreen();
   }
   

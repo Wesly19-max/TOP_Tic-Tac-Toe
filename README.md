@@ -7,3 +7,4 @@
 - [X] restart button mechanism. 
 - [] alow players to type their names
 - [] make ui beautiful
+- [X] bug:active player changes when user clicked on marked cell - I added a conditional logic to check if the cell is empty or not so that it wont play a round which doesn't switch a player turn if it is not empty.
