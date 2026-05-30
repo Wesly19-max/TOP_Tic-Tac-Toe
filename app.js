@@ -204,10 +204,11 @@ function GameController(
       lowerRow++;
       upperCol ++;
     }
-
+    console.log(totalMatches)
     //  EVALUATE WIN CONDITION 
-    if (totalMatches === 3) {
-      const turnDiv = document.querySelector(".turn")
+    const turnDiv = document.querySelector(".turn")
+    if (totalMatches >=3) {
+      
       turnDiv.textContent = `${getActivePlayer().name} wins!`
       
       board.printBoard();
@@ -217,17 +218,15 @@ function GameController(
       
       CellBtns.forEach((cell) => {
           cell.disabled = true;
-          
         }
       )
       boardDiv.classList.add("disabled")
-      
-      
-      
+
       return;
       
-      
     }
+
+    
     switchPlayerTurn();
     printNewRound();
   };
@@ -277,11 +276,38 @@ function ScreenController() {
       })
     }else {
 
+
+        let isFull = true;
+        board.forEach((row)=> {
+          row.forEach((cell)=> {
+
+            if (cell.getValue() == '') {
+              //if there is atleast one empty cell,turn it to false
+              isFull= false;
+              console.log(cell.getValue());
+            
+          }
+          console.log(cell.getValue())
+          
+        })
+      })
+      
+      //if all cells have marks, then declare draw and do not switch player turn
+      if (isFull === true) {
+        playerTurnDiv.classList.add('full');
+        console.log(playerTurnDiv);
+      }
       //clear the board
       boardDiv.textContent = '';
-
+      console.log(playerTurnDiv)
       //display player's turn
-      playerTurnDiv.textContent = `${activePlayer.name}'s turn`;
+      if (playerTurnDiv.classList.contains('full')) {
+        playerTurnDiv.textContent = `It's a tie!`
+        console.log(playerTurnDiv)
+      }else {
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn`;
+      }
+      
 
       board.forEach((row,rowIndex) => {
         row.forEach((cell,colIndex)=> {
