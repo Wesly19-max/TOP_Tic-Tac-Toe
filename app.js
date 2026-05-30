@@ -23,7 +23,7 @@ function GameBoard() {
       row.map((cell) => cell.getValue())
   );
 
-    console.log(boardWithCellValues);
+   
   };
 
   return {getBoard,writeMark,printBoard};
@@ -37,7 +37,7 @@ function Cell() {
       value = player;
     }else {
       const reminderDiv = document.querySelector(".reminder");
-      console.log(reminderDiv)
+     
       alert("This cell has already been marked by another player.Please choose another cell.");
     }
     
@@ -76,13 +76,11 @@ function GameController(
 
   const printNewRound = () => {
     board.printBoard();
-    console.log(`${getActivePlayer().name}'s turn `);
+    
   };
 
   const playRound =(row,col) => {
-    console.log(
-      `Writing ${getActivePlayer().name}'s mark into row ${row}, column ${col}...`
-    );
+    
 
     board.writeMark(row,col,getActivePlayer().token);
 
@@ -211,15 +209,15 @@ function GameController(
     if (totalMatches === 3) {
       const turnDiv = document.querySelector(".turn")
       turnDiv.textContent = `${getActivePlayer().name} wins!`
-      console.log(`${getActivePlayer().name} wins!`);
+      
       board.printBoard();
 
       const boardDiv = document.querySelector(".board");
       const CellBtns = document.querySelectorAll(".cell");
-      console.log(CellBtns)
+      
       CellBtns.forEach((cell) => {
           cell.disabled = true;
-          console.log(cell.disabled)
+          
         }
       )
       boardDiv.classList.add("disabled")
@@ -267,13 +265,13 @@ function ScreenController() {
     if (boardDiv.classList.contains("disabled")) {
       playerTurnDiv.textContent = `${activePlayer.name} wins!`;
       const cellBtns = document.querySelectorAll(".cell");
-      console.log(cellBtns)
+     
       board.forEach((row,rowIndex) => {
         row.forEach((cell,colIndex) => {
           //refer to the last button elements themselves
           const selectedCellBtn = document.querySelector(`[data-column ="${colIndex}"][data-row ="${rowIndex}"]`);
           //change the text of the cells into their value
-          console.log(selectedCellBtn)
+          
           selectedCellBtn.textContent = cell.getValue();
         })
       })
