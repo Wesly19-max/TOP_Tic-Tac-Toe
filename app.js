@@ -211,7 +211,22 @@ function GameController(
       resultDiv.textContent = `${getActivePlayer().name} wins!`
       console.log(`${getActivePlayer().name} wins!`);
       board.printBoard();
+
+      const boardDiv = document.querySelector(".board");
+      const CellBtns = document.querySelectorAll(".cell");
+      console.log(CellBtns)
+      CellBtns.forEach((cell) => {
+          cell.disabled = true;
+          console.log(cell.disabled)
+        }
+      )
+      boardDiv.classList.add("disabled")
+      
+      
+      
       return;
+      
+      
     }
     switchPlayerTurn();
     printNewRound();
@@ -238,8 +253,7 @@ function ScreenController() {
 
 
   const updateScreen = () => {
-    //clear the board
-    boardDiv.textContent = '';
+    
 
     //get the newest version of board and player's turn
     const board = game.getBoard();
@@ -248,21 +262,39 @@ function ScreenController() {
     //display player's turn
     playerTurnDiv.textContent = `${activePlayer.name}'s turn`;
     //render contents of the board
-    board.forEach((row,rowIndex) => {
-      row.forEach((cell,colIndex)=> {
-        const cellButton = document.createElement("button");
-        cellButton.classList.add("cell");
-
-        cellButton.dataset.column = colIndex;
-        cellButton.dataset.row = rowIndex;
-        cellButton.textContent = cell.getValue();
-        boardDiv.appendChild(cellButton);
-
-      
-
+    
+    if (boardDiv.classList.contains("disabled")) {
+      const cellBtns = document.querySelectorAll(".cell");
+      console.log(cellBtns)
+      board.forEach((row,rowIndex) => {
+        row.forEach((cell,colIndex) => {
+          //refer to the last button elements themselves
+          const selectedCellBtn = document.querySelector(`[data-column ="${colIndex}"][data-row ="${rowIndex}"]`);
+          //change the text of the cells into their value
+          console.log(selectedCellBtn)
+          selectedCellBtn.textContent = cell.getValue();
+        })
       })
-    })
-  }
+    }else {
+      //clear the board
+      boardDiv.textContent = '';
+
+      board.forEach((row,rowIndex) => {
+        row.forEach((cell,colIndex)=> {
+          const cellButton = document.createElement("button");
+          cellButton.classList.add("cell");
+
+          cellButton.dataset.column = colIndex;
+          cellButton.dataset.row = rowIndex;
+          cellButton.textContent = cell.getValue();
+          boardDiv.appendChild(cellButton);
+        })
+      })
+      
+    }
+        
+
+    }
   //add event listener to board
   function clickHandlerBoard(e) {
     const selectedColumn = parseInt(e.target.dataset.column);
@@ -270,7 +302,11 @@ function ScreenController() {
     game.playRound(selectedRow,selectedColumn);
     updateScreen();
   }
+  
   boardDiv.addEventListener("click",clickHandlerBoard);
+
+ 
+  
   
   //when restart button is clicked refresh the page
   restartBtn.addEventListener("click",() => {
